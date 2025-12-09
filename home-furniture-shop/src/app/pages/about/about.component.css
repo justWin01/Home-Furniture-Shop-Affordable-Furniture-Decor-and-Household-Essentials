@@ -1,0 +1,92 @@
+.about-section {
+  padding: 40px 60px;
+  background-color: #f9f5e7;
+  overflow: hidden; /* ensures hidden elements don't show before animation */
+}
+
+/* Apply slideUp to all children with staggered delays */
+.about-section * {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: slideUp 0.6s ease forwards;
+}
+
+/* Staggered delays for smoother sequential animation */
+.about-hero { animation-delay: 0.1s; }
+.about-hero h1 { animation-delay: 0.2s; }
+.about-hero p { animation-delay: 0.25s; }
+.about-content { animation-delay: 0.3s; }
+.about-image img { animation-delay: 0.4s; }
+.about-text { animation-delay: 0.5s; }
+.about-text h2 { animation-delay: 0.55s; }
+.about-text p { animation-delay: 0.6s; }
+.about-text ul { animation-delay: 0.65s; }
+
+.about-hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.about-hero h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+.about-hero p {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.about-content {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.about-image img {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.about-text {
+  max-width: 600px;
+}
+
+.about-text h2 {
+  margin-top: 20px;
+  color: #000000;
+  font-size: 1.4rem;
+}
+
+.about-text p {
+  margin-top: 10px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.about-text ul {
+  margin-left: 20px;
+  color: #444;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .about-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about-text {
+    max-width: 100%;
+  }
+}
+
+/* Slide Animation */
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

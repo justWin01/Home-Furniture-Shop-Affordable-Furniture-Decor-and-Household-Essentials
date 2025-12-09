@@ -1,0 +1,149 @@
+/* Page & Login Container */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(90deg, #ffffff, #ffffff);
+  padding: 20px;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.login-container {
+  background: linear-gradient(90deg, #8a7302, #d4b100);
+  padding: 2.5rem;
+  border-radius: 20px;
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  animation: slideUp 0.6s ease;
+}
+
+h2 {
+  text-align: center;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Input Fields */
+input {
+  padding: 0.9rem;
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+  outline: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  border-color: #4f8ef7;
+  box-shadow: 0 0 5px rgba(79,142,247,0.4);
+}
+
+/* Buttons */
+button {
+  padding: 0.9rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: 0.3s ease;
+}
+
+button:hover { opacity: 0.85; }
+
+.admin-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.admin-btn {
+  background: #2d2d2d;
+  color: white;
+  flex: 1;
+  transition: 0.3s ease;
+}
+
+.admin-btn:hover {
+  background: #000;
+}
+
+/* Messages */
+.message {
+  color: rgb(255, 0, 0);
+  font-size: 0.9rem;
+  text-align: center;
+  opacity: 0;
+  animation: fadeInMessage 5s forwards;
+}
+
+.fade-in {
+  animation: fadeInMessage 5s forwards;
+}
+
+/* Sign Up Link */
+.signup-text {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.signup-link {
+  cursor: pointer;
+  color: #4f8ef7;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.signup-link:hover { color: #346fd6; }
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: linear-gradient(90deg, #8a7302, #d4b100);
+  padding: 2rem;
+  border-radius: 20px;
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  animation: zoomIn 0.4s ease;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  border: none;
+  background: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #444;
+}
+
+.close-btn:hove r { color: #ff4d4d; }
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes fadeInMessage { from { opacity: 0; } to { opacity: 1; } }
+@keyframes zoomIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }

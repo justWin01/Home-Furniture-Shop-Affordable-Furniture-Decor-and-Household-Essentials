@@ -1,0 +1,38 @@
+<header class="customer-header">
+  <div class="header-left">
+    <img src="assets/images/logo.png" width="60" height="60" />
+    <h1 class="site-title">Home & Furniture Shop</h1>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="header-actions">
+    <a routerLink="/customer/homecustomer" class="header-icon">Home</a>
+    <a routerLink="/customer/orders" class="header-icon">Orders</a>
+    <input id="customer-search" type="search" placeholder="Search products..." />
+    <button class="header-icon" (click)="toggleProfileModal()">👤</button>
+    <button class="menu-btn" (click)="toggleMenu()">☰</button>
+  </div>
+
+
+<!-- Sliding Menu (Logout Only) -->
+<nav class="customer-nav" [class.active]="menuActive">
+
+  <!-- Close Button -->
+  <button class="close-menu-btn" (click)="toggleMenu()">✕</button>
+  <button class="logout-btn" (click)="logout()">Logout</button>
+</nav>
+
+
+  <!-- Profile Modal -->
+  <div class="profile-modal-overlay" [class.active]="profileModal">
+    <div class="profile-modal">
+      <h2>Profile Information</h2>
+      <p><strong>Name:</strong> {{ user.fullname || 'N/A' }}</p>
+      <p><strong>Address:</strong> {{ user.address || 'N/A' }}</p>
+
+      <button class="close-btn" (click)="toggleProfileModal()">Close</button>
+    </div>
+  </div>
+
+
+</header>

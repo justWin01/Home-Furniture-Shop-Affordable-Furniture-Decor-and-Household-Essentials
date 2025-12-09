@@ -1,0 +1,5 @@
+<app-header *ngIf="currentHeader === 'landing'"></app-header>
+
+<app-customer-header *ngIf="currentHeader === 'customer'"></app-customer-header>
+
+<router-outlet></router-outlet>

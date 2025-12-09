@@ -1,0 +1,45 @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/user.model';
+
+@Component({
+  selector: 'app-customer-header',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './customer-header.component.html',
+  styleUrls: ['./customer-header.component.css']
+})
+export class CustomerHeaderComponent implements OnInit {
+
+  menuActive: boolean = false;
+  profileModal: boolean = false;
+
+  user: User = { fullname: '', email: '', address: '' }; // initialized
+
+  constructor(private router: Router, private userService: UserService) {}
+
+  ngOnInit() {
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      this.user = JSON.parse(userString); // now has fullname and address
+    }
+  }
+
+
+  toggleMenu() {
+    this.menuActive = !this.menuActive;
+  }
+
+  toggleProfileModal() {
+    this.profileModal = !this.profileModal;
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('email');
+    this.router.navigate(['/login']);
+  }
+}

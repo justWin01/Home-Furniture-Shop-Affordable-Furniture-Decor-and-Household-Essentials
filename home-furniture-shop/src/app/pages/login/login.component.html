@@ -1,0 +1,53 @@
+<div class="login-page">
+  <div class="login-container">
+    <h2>Login</h2>
+
+    <!-- Customer Login -->
+    <input type="email" [(ngModel)]="email" placeholder="Email" />
+    <input type="password" [(ngModel)]="password" placeholder="Password" />
+    <button (click)="onLogin()">Login</button>
+
+    <p class="forgot-text" (click)="openForgotPassword()">Forgot Password?</p>
+
+    <!-- Admin Button -->
+    <button class="admin-btn" (click)="openAdminModal('login')">Admin</button>
+
+    <p class="signup-text">
+      Don't have an account?
+      <span class="signup-link" (click)="openSignUpModal()">Sign Up</span>
+    </p>
+  </div>
+</div>
+
+<!-- Sign Up Modal -->
+<div class="modal-backdrop" *ngIf="isSignUpOpen" (click)="closeSignUpModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <h2>Sign Up</h2>
+
+    <input type="text" [(ngModel)]="signupName" placeholder="Full Name" />
+    <input type="email" [(ngModel)]="signupEmail" placeholder="Email" />
+    <input type="password" [(ngModel)]="signupPassword" placeholder="Password" />
+    <input type="text" [(ngModel)]="signupContact" placeholder="Contact Number" />
+    <input type="text" [(ngModel)]="signupAddress" placeholder="Address" />
+
+    <button (click)="onSignUp()">Sign Up</button>
+
+    <button class="close-btn" (click)="closeSignUpModal()">X</button>
+  </div>
+</div>
+
+<!-- Admin Modal (Login/Register combined) -->
+<div class="modal-backdrop" *ngIf="isAdminModalOpen" (click)="closeAdminModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <h2>Admin {{ adminMode === 'login' ? 'Login' : 'Registration' }}</h2>
+
+    <!-- Admin Login -->
+    <ng-container *ngIf="adminMode === 'login'">
+      <input type="email" [(ngModel)]="adminEmail" placeholder="Email" />
+      <input type="password" [(ngModel)]="adminPassword" placeholder="Password" />
+      <button (click)="onAdminLogin()">Login</button>
+    </ng-container>
+
+    <button class="close-btn" (click)="closeAdminModal()">X</button>
+  </div>
+</div>

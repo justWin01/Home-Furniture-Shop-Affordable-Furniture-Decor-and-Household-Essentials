@@ -1,0 +1,25 @@
+<header class="site-header">
+  <div class="header-left">
+    <figure class="logo-container">
+      <img src="" alt="Home & Furniture Logo" width="60" height="60" />
+    </figure>
+
+    <h1 class="site-title">Home & Furniture Shop</h1>
+  </div>
+
+  <nav class="main-navigation" aria-label="Main Navigation">
+    <ul>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+      <li><a routerLink="/about" routerLinkActive="active">About Us</a></li>
+      <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
+      <li><a routerLink="/shop" routerLinkActive="active">Shop</a></li>
+    </ul>
+  </nav>
+
+  <div class="header-actions">
+    <label for="search" class="visually-hidden">Search products</label>
+    <input id="search" type="search" placeholder="Search products..." />
+
+    <button class="login-btn" routerLink="/login">Login</button>
+  </div>
+</header>

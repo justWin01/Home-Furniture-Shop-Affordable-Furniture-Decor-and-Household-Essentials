@@ -1,0 +1,214 @@
+.customer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 45px;
+  background: linear-gradient(90deg, #d4b100, #b89000);
+  color: #000;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 100;
+}
+
+/* Group: Logo + Title */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Center Title */
+.site-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-left: 15px;
+}
+
+/* Right aligned Actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* For buttons/icons identical spacing */
+.header-icon {
+  position: relative;
+  border-radius: 50%;
+  padding: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  border: none;
+  color: black;
+  transition: color 0.2s;
+}
+
+/* Elegant underline hover effect */
+.header-icon::after {
+  content: "";
+  position: absolute;
+  bottom: 0; /* underline at the bottom of the icon */
+  left: 50%; /* start from center */
+  width: 0%;
+  height: 2px;
+  background: black; /* underline color */
+  transition: all 0.3s ease;
+  transform: translateX(-50%); /* center the line */
+  border-radius: 1px;
+}
+
+.header-icon:hover::after {
+  width: 80%; /* adjust width of the underline on hover */
+}
+
+/* REMOVE THIS: This is causing the middle layout issue */
+.header-actions input {
+  width: 180px;
+}
+
+.header-actions input {
+  padding: 7px 12px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background: #f2f2f2;
+  font-size: 0.95rem;
+}
+
+.menu-btn {
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.menu-btn:hover {
+  color: #ffd700;
+}
+
+/* Sliding Menu */
+.customer-nav {
+  position: fixed;
+  top: 0;
+  right: -320px; /* hidden by default */
+  width: 260px;
+  height: 100%;
+  background: #b89000;
+  box-shadow: -3px 0 12px rgba(0, 0, 0, 0.2);
+  transition: right 0.35s ease-in-out;
+  padding: 25px 20px;
+  z-index: 2000;
+}
+
+.customer-nav.active {
+  right: 0; /* visible when active */
+}
+
+/* Close button inside slide menu */
+.close-menu-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 25px;
+  display: block;
+  text-align: right;
+  width: 100%;
+}
+
+.close-menu-btn:hover {
+  color: red;
+}
+
+/* Logout button */
+.logout-btn {
+  width: 100%;
+  padding: 12px;
+  background: #e74c3c;
+  border: none;
+  border-radius: 6px;
+  color: black;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.logout-btn:hover {
+  background: #d0392e;
+}
+
+
+/* Modal */
+.profile-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.profile-modal-overlay.active {
+  display: flex;
+}
+
+.profile-modal {
+  background: white;
+  padding: 25px;
+  width: 320px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+.profile-modal h2 {
+  margin-bottom: 10px;
+}
+
+.close-btn {
+  margin-top: 15px;
+  padding: 8px 15px;
+  border: none;
+  background: #d4b100;
+  color: black;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background: #b89000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .customer-header {
+    padding: 15px 20px;
+  }
+
+  .header-actions input {
+    width: 140px;
+  }
+
+  .site-title {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .customer-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .header-actions input {
+    flex: 1;
+  }
+}
