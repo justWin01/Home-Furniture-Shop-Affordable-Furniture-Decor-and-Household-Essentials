@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 
 @Component({
@@ -16,9 +15,9 @@ export class CustomerHeaderComponent implements OnInit {
   menuActive: boolean = false;
   profileModal: boolean = false;
 
-  user: User = { fullname: '', email: '', address: '' }; // initialized
+  user: User = { fullname: '', email: '', address: '' };
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     const userString = localStorage.getItem('user');
@@ -39,7 +38,7 @@ export class CustomerHeaderComponent implements OnInit {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
-    localStorage.removeItem('email');
+    localStorage.removeItem('user');
     this.router.navigate(['/login']);
   }
 }

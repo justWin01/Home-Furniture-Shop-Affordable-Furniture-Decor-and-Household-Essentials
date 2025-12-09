@@ -70,8 +70,7 @@ export class LoginComponent {
             email: res.user.email
           };
 
-          // Store token, role, and full user in localStorage
-
+          // Store  role, and full user in localStorage
           localStorage.setItem('role', res.role || '');
           localStorage.setItem('user', JSON.stringify(user));
 
@@ -103,8 +102,6 @@ export class LoginComponent {
       }
     });
   }
-
-
 
   // ====================== CUSTOMER SIGN UP ======================
   openSignUpModal() { this.isSignUpOpen = true; }

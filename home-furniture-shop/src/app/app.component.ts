@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent {
 
-  currentHeader: string = 'landing';   // ✅ default header
+  currentHeader: string = 'landing';
 
   constructor(private router: Router) {
     this.router.events.subscribe(() => {
