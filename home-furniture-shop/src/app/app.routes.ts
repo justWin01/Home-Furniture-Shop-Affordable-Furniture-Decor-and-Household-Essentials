@@ -5,12 +5,14 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { ShopComponent } from './pages/shop/shop.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomecustomerComponent } from './customer/homecustomer/homecustomer/homecustomer.component';
+import { OrdercustomerComponent } from './customer/ordercustomer/ordercustomer/ordercustomer.component';
 
 
 
 // Customer Routes
 export const customerRoutes: Routes = [
-  { path: 'homecustomer', component: HomecustomerComponent,title: 'Home' }
+  { path: 'homecustomer', component: HomecustomerComponent,title: 'Home' },
+  { path: 'customer/ordercustomer', component: OrdercustomerComponent }
 ];
 
 export const routes: Routes = [
@@ -23,5 +25,5 @@ export const routes: Routes = [
   // Customer routes
   { path: 'customer', children: customerRoutes },
 
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'customer/homecustomer' }
 ];
