@@ -6,8 +6,8 @@
 
   <!-- RIGHT -->
   <div class="header-actions">
-    <a routerLink="/customer/homecustomer/homecustomer" class="header-icon">Home</a>
-    <a routerLink="/customer/ordercustomer/ordercustomer" class="header-icon">Orders</a>
+    <a routerLink="/customer/homecustomer" class="header-icon" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" >Home</a>
+    <a routerLink="/customer/ordercustomer" class="header-icon">Orders</a>
     <input id="customer-search" type="search" placeholder="Search products..." />
     <button class="header-icon" (click)="toggleProfileModal()">👤</button>
     <button class="menu-btn" (click)="toggleMenu()">☰</button>

@@ -3,9 +3,22 @@
     <h2>Login</h2>
 
     <!-- Customer Login -->
-    <input type="email" [(ngModel)]="email" placeholder="Email" />
-    <input type="password" [(ngModel)]="password" placeholder="Password" />
+  <input type="email" [(ngModel)]="email" placeholder="Email" />
+
+  <div class="password-wrapper">
+    <input
+      [type]="showPassword ? 'text' : 'password'"
+      [(ngModel)]="password"
+      placeholder="Password"
+    />
+    <span class="toggle-icon" (click)="togglePassword()">
+      {{ showPassword ? 'Hide' : 'Unhide' }}
+    </span>
+  </div>
+
+
     <button (click)="onLogin()">Login</button>
+
 
     <p class="forgot-text" (click)="openForgotPassword()">Forgot Password?</p>
 
@@ -26,11 +39,24 @@
 
     <input type="text" [(ngModel)]="signupName" placeholder="Full Name" />
     <input type="email" [(ngModel)]="signupEmail" placeholder="Email" />
-    <input type="password" [(ngModel)]="signupPassword" placeholder="Password" />
+
+    <div class="password-wrapper">
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        [(ngModel)]="password"
+        placeholder="Password"
+      />
+      <span class="toggle-icon" (click)="togglePassword()">
+        {{ showPassword ? 'Hide' : 'Unhide' }}
+      </span>
+    </div>
+
+
     <input type="text" [(ngModel)]="signupContact" placeholder="Contact Number" />
     <input type="text" [(ngModel)]="signupAddress" placeholder="Address" />
 
     <button (click)="onSignUp()">Sign Up</button>
+
 
     <button class="close-btn" (click)="closeSignUpModal()">X</button>
   </div>
@@ -42,11 +68,23 @@
     <h2>Admin {{ adminMode === 'login' ? 'Login' : 'Registration' }}</h2>
 
     <!-- Admin Login -->
-    <ng-container *ngIf="adminMode === 'login'">
-      <input type="email" [(ngModel)]="adminEmail" placeholder="Email" />
-      <input type="password" [(ngModel)]="adminPassword" placeholder="Password" />
-      <button (click)="onAdminLogin()">Login</button>
-    </ng-container>
+<ng-container *ngIf="adminMode === 'login'">
+  <input type="email" [(ngModel)]="adminEmail" placeholder="Email" />
+
+  <div class="password-wrapper">
+    <input
+      [type]="showAdminPassword ? 'text' : 'password'"
+      [(ngModel)]="adminPassword"
+      placeholder="Password"
+    />
+    <span class="toggle-icon" (click)="toggleAdminPassword()">
+      {{ showAdminPassword ? 'Hide' : 'Unhide' }}
+    </span>
+  </div>
+
+  <button (click)="onAdminLogin()">Login</button>
+</ng-container>
+
 
     <button class="close-btn" (click)="closeAdminModal()">X</button>
   </div>

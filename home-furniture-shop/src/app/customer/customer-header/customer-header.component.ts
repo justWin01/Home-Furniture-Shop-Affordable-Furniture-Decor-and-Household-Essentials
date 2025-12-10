@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-customer-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, RouterLinkActive ],
   templateUrl: './customer-header.component.html',
   styleUrls: ['./customer-header.component.css']
 })

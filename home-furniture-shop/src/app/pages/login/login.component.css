@@ -104,6 +104,26 @@ button:hover { opacity: 0.85; }
 
 .signup-link:hover { color: #346fd6; }
 
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 92%;
+}
+
+.toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  font-size: 18px;
+}
+
+
 /* Modal */
 .modal-backdrop {
   position: fixed;

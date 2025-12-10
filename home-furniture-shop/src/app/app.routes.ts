@@ -1,20 +1,30 @@
 import { Routes } from '@angular/router';
+
+// Main pages
 import { HomeComponent } from './pages/home/home.component';
 import { AboutComponent } from './pages/about/about.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { ShopComponent } from './pages/shop/shop.component';
 import { LoginComponent } from './pages/login/login.component';
+
+// Customer pages
 import { HomecustomerComponent } from './customer/homecustomer/homecustomer/homecustomer.component';
 import { OrdercustomerComponent } from './customer/ordercustomer/ordercustomer/ordercustomer.component';
 
 
-
-// Customer Routes
+// ----------------------
+// CUSTOMER ROUTES
+// ----------------------
 export const customerRoutes: Routes = [
-  { path: 'homecustomer', component: HomecustomerComponent,title: 'Home' },
-  { path: 'customer/ordercustomer', component: OrdercustomerComponent }
+  { path: 'homecustomer', component: HomecustomerComponent, title: 'Customer Home' },
+  { path: 'ordercustomer', component: OrdercustomerComponent, title: 'Customer Orders' }
 ];
 
+
+
+// ----------------------
+// APP ROUTES
+// ----------------------
 export const routes: Routes = [
   { path: '', component: HomeComponent, title: 'Home' },
   { path: 'about', component: AboutComponent, title: 'About' },
@@ -22,8 +32,8 @@ export const routes: Routes = [
   { path: 'shop', component: ShopComponent, title: 'Shop' },
   { path: 'login', component: LoginComponent, title: 'Login' },
 
-  // Customer routes
+  // Customer Route Parent
   { path: 'customer', children: customerRoutes },
-
+  // Default redirect
   { path: '**', redirectTo: 'customer/homecustomer' }
 ];

@@ -14,41 +14,37 @@ import Swal from 'sweetalert2';
 })
 export class LoginComponent {
 
-  // CUSTOMER LOGIN
+  // ====================== CUSTOMER LOGIN ======================
   email = '';
   password = '';
+  showPassword = false; // toggle customer password visibility
 
-  // SIGN UP MODAL
+  // ====================== CUSTOMER SIGN UP ======================
   isSignUpOpen = false;
   signupName = '';
   signupEmail = '';
   signupPassword = '';
   signupContact = '';
   signupAddress = '';
+  showSignUpPassword = false; // toggle sign-up password visibility
 
-  // ADMIN MODAL
+  // ====================== ADMIN MODAL ======================
   isAdminModalOpen = false;
   adminMode: 'login' | 'register' = 'login';
-
   adminEmail = '';
   adminPassword = '';
-
+  showAdminPassword = false; // toggle admin login password visibility
   adminRegisterName = '';
   adminRegisterEmail = '';
   adminRegisterPassword = '';
 
   constructor(private userService: UserService, private router: Router) {}
 
-  // RESET ADMIN FIELDS
-  private resetAdminFields() {
-    this.adminEmail = '';
-    this.adminPassword = '';
-    this.adminRegisterName = '';
-    this.adminRegisterEmail = '';
-    this.adminRegisterPassword = '';
+  // ====================== CUSTOMER LOGIN METHODS ======================
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
-  // ====================== CUSTOMER LOGIN ======================
   onLogin() {
     if (!this.email || !this.password) {
       Swal.fire({
@@ -61,16 +57,13 @@ export class LoginComponent {
 
     this.userService.login(this.email, this.password).subscribe({
       next: (res: any) => {
-        // Check backend response carefully
         if (res.user) {
-          // Map backend user to frontend fields
           const user = {
             fullname: res.user.full_name || res.user.name || '',
             address: res.user.address || '',
             email: res.user.email
           };
 
-          // Store  role, and full user in localStorage
           localStorage.setItem('role', res.role || '');
           localStorage.setItem('user', JSON.stringify(user));
 
@@ -81,10 +74,8 @@ export class LoginComponent {
             showConfirmButton: false
           });
 
-          // Navigate to customer home
           this.router.navigate(['/customer/homecustomer']);
         } else {
-          // Backend response did not contain token/user → treat as failed login
           Swal.fire({
             icon: 'error',
             title: 'Login Failed',
@@ -93,7 +84,6 @@ export class LoginComponent {
         }
       },
       error: (err: any) => {
-        // Network or server error
         Swal.fire({
           icon: 'error',
           title: 'Login Failed',
@@ -103,7 +93,11 @@ export class LoginComponent {
     });
   }
 
-  // ====================== CUSTOMER SIGN UP ======================
+  // ====================== CUSTOMER SIGN UP METHODS ======================
+  toggleSignUpPassword() {
+    this.showSignUpPassword = !this.showSignUpPassword;
+  }
+
   openSignUpModal() { this.isSignUpOpen = true; }
   closeSignUpModal() { this.isSignUpOpen = false; }
 
@@ -149,7 +143,7 @@ export class LoginComponent {
     this.router.navigate(['/forgot-password']);
   }
 
-  // ====================== ADMIN MODAL ======================
+  // ====================== ADMIN MODAL METHODS ======================
   openAdminModal(mode: 'login' | 'register' = 'login') {
     this.isAdminModalOpen = true;
     this.adminMode = mode;
@@ -164,6 +158,18 @@ export class LoginComponent {
   toggleAdminMode() {
     this.adminMode = this.adminMode === 'login' ? 'register' : 'login';
     this.resetAdminFields();
+  }
+
+  toggleAdminPassword() {
+    this.showAdminPassword = !this.showAdminPassword;
+  }
+
+  private resetAdminFields() {
+    this.adminEmail = '';
+    this.adminPassword = '';
+    this.adminRegisterName = '';
+    this.adminRegisterEmail = '';
+    this.adminRegisterPassword = '';
   }
 
   // ====================== ADMIN LOGIN ======================
@@ -218,6 +224,7 @@ export class LoginComponent {
       password: this.adminRegisterPassword
     };
 
-
+    // Implement registration API call if needed
   }
+
 }
