@@ -11,6 +11,10 @@ import { LoginComponent } from './pages/login/login.component';
 import { HomecustomerComponent } from './customer/homecustomer/homecustomer/homecustomer.component';
 import { OrdercustomerComponent } from './customer/ordercustomer/ordercustomer/ordercustomer.component';
 
+// Admin pages
+import { HomeadminComponent } from './admin/homeadmin/homeadmin.component';
+
+
 
 // ----------------------
 // CUSTOMER ROUTES
@@ -20,7 +24,12 @@ export const customerRoutes: Routes = [
   { path: 'ordercustomer', component: OrdercustomerComponent, title: 'Customer Orders' }
 ];
 
-
+// ----------------------
+// ADMIN ROUTES
+// ----------------------
+export const adminRoutes: Routes = [
+  { path: 'homeadmin', component: HomeadminComponent, title: 'Admin Home' },
+];
 
 // ----------------------
 // APP ROUTES
@@ -34,6 +43,10 @@ export const routes: Routes = [
 
   // Customer Route Parent
   { path: 'customer', children: customerRoutes },
+
+  // Admin Route Parent
+  { path: 'admin', children: adminRoutes },
+
   // Default redirect
   { path: '**', redirectTo: 'customer/homecustomer' }
 ];

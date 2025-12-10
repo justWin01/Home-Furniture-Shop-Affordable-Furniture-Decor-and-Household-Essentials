@@ -194,8 +194,17 @@ export class LoginComponent {
 
         if (res.token) localStorage.setItem('admin_token', res.token);
 
+        if (res.user) {
+          const admin = {
+            fullname: res.user.full_name || res.user.name || '',
+            email: res.user.email
+          };
+          localStorage.setItem('role', 'admin');
+          localStorage.setItem('user', JSON.stringify(admin));
+        }
+
         this.closeAdminModal();
-        this.router.navigate(['/admin/dashboard']);
+        this.router.navigate(['/admin/homeadmin']);
       },
       error: (err: any) => {
         Swal.fire({
@@ -206,25 +215,4 @@ export class LoginComponent {
       }
     });
   }
-
-  // ====================== ADMIN REGISTER ======================
-  onAdminRegister() {
-    if (!this.adminRegisterName || !this.adminRegisterEmail || !this.adminRegisterPassword) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Fields',
-        text: 'Please fill all fields.',
-      });
-      return;
-    }
-
-    const data = {
-      full_name: this.adminRegisterName,
-      email: this.adminRegisterEmail,
-      password: this.adminRegisterPassword
-    };
-
-    // Implement registration API call if needed
-  }
-
 }
