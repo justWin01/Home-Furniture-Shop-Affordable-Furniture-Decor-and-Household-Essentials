@@ -42,21 +42,17 @@
 
     <div class="password-wrapper">
       <input
-        [type]="showPassword ? 'text' : 'password'"
-        [(ngModel)]="password"
+        [type]="showSignUpPassword ? 'text' : 'password'"
+        [(ngModel)]="signupPassword"
         placeholder="Password"
       />
-      <span class="toggle-icon" (click)="togglePassword()">
-        {{ showPassword ? 'Hide' : 'Unhide' }}
+      <span class="toggle-icon" (click)="toggleSignUpPassword()">
+        {{ showSignUpPassword ? 'Hide' : 'Unhide' }}
       </span>
     </div>
-
-
     <input type="text" [(ngModel)]="signupContact" placeholder="Contact Number" />
     <input type="text" [(ngModel)]="signupAddress" placeholder="Address" />
-
     <button (click)="onSignUp()">Sign Up</button>
-
 
     <button class="close-btn" (click)="closeSignUpModal()">X</button>
   </div>
