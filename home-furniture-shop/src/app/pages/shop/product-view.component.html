@@ -1,0 +1,14 @@
+<div class="product-view" *ngIf="product">
+  <img
+    *ngIf="product.image"
+    [src]="'http://localhost:5000/static/uploads/products/' + product.image"
+  />
+
+  <div class="details">
+    <h2>{{ product.product_name }}</h2>
+    <p class="price">₱{{ product.price }}</p>
+    <p class="description">{{ product.description }}</p>
+
+    <button (click)="orderProduct()">Order Now</button>
+  </div>
+</div>

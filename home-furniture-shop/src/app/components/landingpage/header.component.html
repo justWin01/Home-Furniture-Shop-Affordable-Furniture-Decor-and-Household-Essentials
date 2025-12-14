@@ -18,7 +18,14 @@
 
   <div class="header-actions">
     <label for="search" class="visually-hidden">Search products</label>
-    <input id="search" type="search" placeholder="Search products..." />
+    <input
+      id="search"
+      type="search"
+      placeholder="Search products..."
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="searchProducts()"
+    />
+    <button (click)="searchProducts()">Search</button>
 
     <button class="login-btn" routerLink="/login">Login</button>
   </div>

@@ -1,1 +1,11 @@
-<p>e work nako ni next day!</p>
+<div class="shop-container">
+  <div class="product-grid">
+    <div class="product-card" *ngFor="let p of products">
+      <img *ngIf="p.image" [src]="'http://localhost:5000/static/uploads/products/' + p.image" />
+      <h3>{{ p.product_name }}</h3>
+      <p class="price">₱{{ p.price }}</p>
+      <button (click)="viewProductModal(p)">View</button>
+      <button (click)="orderProduct(p)" class="order-btn">Order</button>
+    </div>
+  </div>
+</div>

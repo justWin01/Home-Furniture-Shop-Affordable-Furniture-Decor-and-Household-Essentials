@@ -20,15 +20,15 @@ import { HomeadminComponent } from './admin/homeadmin/homeadmin.component';
 // CUSTOMER ROUTES
 // ----------------------
 export const customerRoutes: Routes = [
-  { path: 'homecustomer', component: HomecustomerComponent, title: 'Customer Home' },
-  { path: 'ordercustomer', component: OrdercustomerComponent, title: 'Customer Orders' }
+  { path: 'homecustomer', component: HomecustomerComponent, title: ' Home' },
+  { path: 'ordercustomer', component: OrdercustomerComponent, title: ' Orders' }
 ];
 
 // ----------------------
 // ADMIN ROUTES
 // ----------------------
 export const adminRoutes: Routes = [
-  { path: 'homeadmin', component: HomeadminComponent, title: 'Admin Home' },
+  { path: 'homeadmin', component: HomeadminComponent, title: ' Home' },
 ];
 
 // ----------------------
