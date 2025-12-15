@@ -1,3 +1,40 @@
+/* First Row - Category Selection */
+.firstrow {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 15px 20px;
+  background-color: #f4f9ff;
+  border-radius: 10px;
+  margin-bottom: 25px;
+}
+
+.firstrow button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.firstrow button:hover {
+  background-color: #d0ebff;
+  transform: scale(1.05);
+}
+
+.firstrow button.active {
+  background-color: #d4b100;
+  color: #000000;
+  border-color: #0077b6;
+}
+
+/* Hide scroll bar */
+.firstrow::-webkit-scrollbar { display: none; }
+
 /* Product Grid */
 .product-grid {
   display: grid;
@@ -5,28 +42,23 @@
   gap: 50px;
 }
 
-/* Product Card */
 .product-card {
   background: #fff;
   border-radius: 14px;
   padding: 16px;
   text-align: center;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
   transition: transform 0.25s, box-shadow 0.25s;
-
-  /* Animation */
   opacity: 0;
   animation: fadeInUp 0.5s forwards;
-  animation-delay: calc(0.1s * var(--i)); /* dynamic delay */
+  animation-delay: calc(0.1s * var(--i));
 }
 
-/* Hover effect */
 .product-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
 }
 
-/* Product Image */
 .product-card img {
   width: 100%;
   height: 200px;
@@ -35,19 +67,25 @@
   margin-bottom: 12px;
 }
 
-/* Product Name */
-.product-card h3 {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 10px 0 5px;
-}
-
-/* Price */
 .price {
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 12px;
+}
+
+.quantity-wrapper {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.quantity-wrapper input {
+  width: 60px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
 /* Buttons */
@@ -62,7 +100,6 @@ button {
   transition: background 0.25s, transform 0.15s;
 }
 
-/* View Button */
 button:not(.order-btn) {
   background: #e9f5ff;
   color: #000;
@@ -73,7 +110,6 @@ button:not(.order-btn):hover {
   transform: scale(1.02);
 }
 
-/* Order Button */
 .order-btn {
   background: linear-gradient(135deg, #facc15, #eab308);
   color: #1f2937;
@@ -85,14 +121,8 @@ button:not(.order-btn):hover {
   transform: scale(1.04);
 }
 
-/* Fade-in + Slide-up Animation */
+/* Fade-in animation */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

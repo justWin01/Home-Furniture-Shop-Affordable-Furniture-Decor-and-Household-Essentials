@@ -20,6 +20,8 @@ export class HomecustomerComponent implements OnInit {
   paginatedProducts: Product[] = [];
   categories: Category[] = [];
 
+  selectedCategory: number = 0; // 0 = All categories
+
   // Pagination
   currentPage = 1;
   productsPerPage = 6;
@@ -42,35 +44,51 @@ export class HomecustomerComponent implements OnInit {
       this.productService.getAll().subscribe(products => {
         this.products = products.map(p => ({
           ...p,
-          category_name:
-            this.categories.find(c => c.category_id === p.category_id)
-              ?.category_name || 'N/A'
+          category_name: this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A',
+          stock_quantity: p.stock_quantity ?? 0 // fallback to 0 if undefined
         }));
 
-        this.totalPages = Math.ceil(this.products.length / this.productsPerPage);
-        this.updatePaginatedProducts();
+        this.applyFilter();
       });
     });
   }
 
-  updatePaginatedProducts() {
+  applyFilter() {
+    let filteredProducts = this.products;
+
+    if (this.selectedCategory !== 0) {
+      filteredProducts = this.products.filter(p => p.category_id === this.selectedCategory);
+    }
+
+    this.totalPages = Math.ceil(filteredProducts.length / this.productsPerPage);
+    this.currentPage = 1;
+    this.updatePaginatedProducts(filteredProducts);
+  }
+
+  updatePaginatedProducts(filteredProducts?: Product[]) {
+    const list = filteredProducts || this.products;
     const start = (this.currentPage - 1) * this.productsPerPage;
     const end = start + this.productsPerPage;
-    this.paginatedProducts = this.products.slice(start, end);
+    this.paginatedProducts = list.slice(start, end);
   }
 
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.updatePaginatedProducts();
+      this.applyFilter();
     }
   }
 
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.updatePaginatedProducts();
+      this.applyFilter();
     }
+  }
+
+  filterByCategory(categoryId: number) {
+    this.selectedCategory = categoryId;
+    this.applyFilter();
   }
 
   viewProductModal(product: Product) {
@@ -82,7 +100,7 @@ export class HomecustomerComponent implements OnInit {
         <p style="font-weight:bold; color:#0077b6;">₱${product.price}</p>
         <p>Category: ${product.category_name}</p>
         <p>Description: ${product.description || 'N/A'}</p>
-        <p>Stock Quantity: ${product.stock_quantity}</p>
+        <p>Remaining Stock: ${product.stock_quantity}</p>
       `,
       showCloseButton: true,
       confirmButtonText: 'Close',
@@ -91,7 +109,21 @@ export class HomecustomerComponent implements OnInit {
   }
 
   orderProduct(product: Product) {
-    // Redirect to order page with product id as parameter
-    this.router.navigate(['/ordercustomer/ordercustomer'], { queryParams: { product_id: product.product_id } });
+    if (!product.stock_quantity || product.stock_quantity <= 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Out of Stock',
+        text: 'This product is no longer available.'
+      });
+      return;
+    }
+
+    // Redirect to order page with product id and quantity = 1
+    this.router.navigate(['/ordercustomer/ordercustomer'], {
+      queryParams: { product_id: product.product_id, quantity: 1 }
+    });
+
+    // Reduce the stock locally
+    product.stock_quantity!--;
   }
 }

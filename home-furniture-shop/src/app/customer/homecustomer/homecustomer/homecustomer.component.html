@@ -1,8 +1,23 @@
-<div class="shop-container">
+<!-- First Row: Category Selection -->
+<div class="firstrow">
+  <button
+    [class.active]="selectedCategory === 0"
+    (click)="filterByCategory(0)">
+    All
+  </button>
+
+  <button
+    *ngFor="let c of categories"
+    [class.active]="selectedCategory === c.category_id"
+    (click)="filterByCategory(c.category_id)">
+    {{ c.category_name }}
+  </button>
+</div>
+
+<!-- Second Row: Product Grid -->
+<div class="product-container">
   <div class="product-grid">
-    <div class="product-card"
-         *ngFor="let p of paginatedProducts; let i = index"
-         [style.--i]="i + 1">
+    <div class="product-card" *ngFor="let p of paginatedProducts; let i = index" [style.--i]="i + 1">
 
       <img *ngIf="p.image"
            [src]="'http://localhost:5000/static/uploads/products/' + p.image" />
@@ -10,9 +25,12 @@
       <h3>{{ p.product_name }}</h3>
       <p class="price">₱{{ p.price }}</p>
       <p class="category">{{ p.category_name }}</p>
+      <p>Remaining Stock: {{ p.stock_quantity }}</p>
 
       <button (click)="viewProductModal(p)">View</button>
-      <button class="order-btn" (click)="orderProduct(p)">Order</button>
+      <button class="order-btn" (click)="orderProduct(p)" [disabled]="!p.stock_quantity || p.stock_quantity === 0">
+        Order
+      </button>
     </div>
   </div>
 
