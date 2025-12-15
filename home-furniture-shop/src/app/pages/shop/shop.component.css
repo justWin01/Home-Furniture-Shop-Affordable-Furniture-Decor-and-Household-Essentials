@@ -4,12 +4,12 @@
   background: #f8fafc;
 }
 
-/* Product Grid */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(6, 1fr); /* 6 columns per row */
   gap: 25px;
 }
+
 
 /* Product Card */
 .product-card {
@@ -66,7 +66,7 @@ button {
 /* View Button */
 button:not(.order-btn) {
   background: #e9f5ff;
-  color: #0077b6;
+  color: #000000;
 }
 
 button:not(.order-btn):hover {

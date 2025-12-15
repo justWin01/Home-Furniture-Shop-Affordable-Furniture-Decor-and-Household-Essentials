@@ -47,8 +47,9 @@ export class ShopComponent implements OnInit {
         <img src="http://localhost:5000/static/uploads/products/${product.image || ''}"
              style="width:250px; height:250px; object-fit:cover; margin-bottom:10px;" />
         <p style="font-weight:bold; color:#0077b6;">₱${product.price}</p>
-        <p><strong>Category:</strong> ${product.category_name || 'N/A'}</p>
-        <p>${product.description || ''}</p>
+        <p>Category: ${product.category_name || 'N/A'}</p>
+        <p>Description: ${product.description || 'N/A'}</p>
+        <p>Stock Quantity: ${product.stock_quantity}</p> <!-- Added stock_quantity -->
       `,
       showCloseButton: true,
       showCancelButton: true,
@@ -60,6 +61,7 @@ export class ShopComponent implements OnInit {
       if (result.isConfirmed) this.orderProduct(product);
     });
   }
+
 
   orderProduct(product: Product) {
     const isLoggedIn = localStorage.getItem('token');
