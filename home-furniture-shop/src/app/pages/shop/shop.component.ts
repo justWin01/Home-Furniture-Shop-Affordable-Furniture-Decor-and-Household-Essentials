@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
+import { CategoryService } from '../../services/category.service';
 import { Product } from '../../models/product.model';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-shop',
@@ -14,19 +16,30 @@ import { Product } from '../../models/product.model';
 })
 export class ShopComponent implements OnInit {
   products: Product[] = [];
+  categories: Category[] = [];
 
   constructor(
     private productService: ProductService,
+    private categoryService: CategoryService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.productService.getAll().subscribe(res => {
-      this.products = res;
+    // Fetch categories first
+    this.categoryService.getAll().subscribe(categories => {
+      this.categories = categories;
+
+      // Then fetch products
+      this.productService.getAll().subscribe(products => {
+        // Map category_name to each product
+        this.products = products.map(p => ({
+          ...p,
+          category_name: this.categories.find(c => c.category_id === p.category_id)?.category_name
+        }));
+      });
     });
   }
 
-  // Show modal with product details
   viewProductModal(product: Product) {
     Swal.fire({
       title: `<strong>${product.product_name}</strong>`,
@@ -34,7 +47,7 @@ export class ShopComponent implements OnInit {
         <img src="http://localhost:5000/static/uploads/products/${product.image || ''}"
              style="width:250px; height:250px; object-fit:cover; margin-bottom:10px;" />
         <p style="font-weight:bold; color:#0077b6;">₱${product.price}</p>
-        <p><strong>Category:</strong> ${product.category?.category_name || 'N/A'}</p>
+        <p><strong>Category:</strong> ${product.category_name || 'N/A'}</p>
         <p>${product.description || ''}</p>
       `,
       showCloseButton: true,
@@ -48,7 +61,6 @@ export class ShopComponent implements OnInit {
     });
   }
 
-  // Place order with login check
   orderProduct(product: Product) {
     const isLoggedIn = localStorage.getItem('token');
 

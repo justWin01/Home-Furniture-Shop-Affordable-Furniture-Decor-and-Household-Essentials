@@ -3,18 +3,28 @@
     <h2>Login</h2>
 
     <!-- Customer Login -->
-  <input type="email" [(ngModel)]="email" placeholder="Email" />
+    <form autocomplete="off">
+      <input
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        placeholder="Email"
+        autocomplete="off"
+      />
 
-  <div class="password-wrapper">
-    <input
-      [type]="showPassword ? 'text' : 'password'"
-      [(ngModel)]="password"
-      placeholder="Password"
-    />
-    <span class="toggle-icon" (click)="togglePassword()">
-      {{ showPassword ? 'Hide' : 'Unhide' }}
-    </span>
-  </div>
+      <div class="password-wrapper">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Password"
+          autocomplete="new-password"
+        />
+        <span class="toggle-icon" (click)="togglePassword()">
+          {{ showPassword ? 'Hide' : 'Unhide' }}
+        </span>
+      </div>
+    </form>
 
 
     <button (click)="onLogin()">Login</button>
@@ -33,30 +43,62 @@
 </div>
 
 <!-- Sign Up Modal -->
+
 <div class="modal-backdrop" *ngIf="isSignUpOpen" (click)="closeSignUpModal()">
   <div class="modal-container" (click)="$event.stopPropagation()">
     <h2>Sign Up</h2>
 
-    <input type="text" [(ngModel)]="signupName" placeholder="Full Name" />
-    <input type="email" [(ngModel)]="signupEmail" placeholder="Email" />
-
-    <div class="password-wrapper">
+    <form autocomplete="off">
       <input
-        [type]="showSignUpPassword ? 'text' : 'password'"
-        [(ngModel)]="signupPassword"
-        placeholder="Password"
+        type="text"
+        [(ngModel)]="signupName"
+        name="signupName"
+        placeholder="Full Name"
       />
-      <span class="toggle-icon" (click)="toggleSignUpPassword()">
-        {{ showSignUpPassword ? 'Hide' : 'Unhide' }}
-      </span>
-    </div>
-    <input type="text" [(ngModel)]="signupContact" placeholder="Contact Number" />
-    <input type="text" [(ngModel)]="signupAddress" placeholder="Address" />
-    <button (click)="onSignUp()">Sign Up</button>
+
+      <input
+        type="email"
+        [(ngModel)]="signupEmail"
+        name="signupEmail"
+        placeholder="Email"
+        autocomplete="off"
+      />
+
+      <div class="password-wrapper">
+        <input
+          [type]="showSignUpPassword ? 'text' : 'password'"
+          [(ngModel)]="signupPassword"
+          name="signupPassword"
+          placeholder="Password"
+          autocomplete="new-password"
+        />
+        <span class="toggle-icon" (click)="toggleSignUpPassword()">
+          {{ showSignUpPassword ? 'Hide' : 'Unhide' }}
+        </span>
+      </div>
+
+      <input
+        type="text"
+        [(ngModel)]="signupContact"
+        name="signupContact"
+        placeholder="Contact Number"
+      />
+
+      <input
+        type="text"
+        [(ngModel)]="signupAddress"
+        name="signupAddress"
+        placeholder="Address"
+      />
+
+
+      <button type="button" (click)="onSignUp()">Sign Up</button>
+    </form>
 
     <button class="close-btn" (click)="closeSignUpModal()">X</button>
   </div>
 </div>
+
 
 <!-- Admin Modal (Login/Register combined) -->
 <div class="modal-backdrop" *ngIf="isAdminModalOpen" (click)="closeAdminModal()">

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import Swal from 'sweetalert2'; // <-- import SweetAlert2
+import Swal from 'sweetalert2';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 
@@ -46,14 +46,5 @@ export class ProductViewComponent implements OnInit {
       });
       return;
     }
-
-    // If logged in, show SweetAlert for order confirmation
-    Swal.fire({
-      icon: 'success',
-      title: 'Order Placed!',
-      text: `Order placed for ${this.product.product_name}`,
-      timer: 2000,
-      showConfirmButton: false
-    });
   }
 }
