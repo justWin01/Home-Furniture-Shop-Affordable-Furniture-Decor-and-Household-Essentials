@@ -1,0 +1,89 @@
+.product-container {
+  margin-top: 150px;
+  padding: 0 40px;
+}
+
+
+/* Product Grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+}
+
+/* Product Card */
+.product-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s, box-shadow 0.25s;
+
+  /* Animation */
+  opacity: 0;
+  animation: fadeInUp 0.5s forwards;
+  animation-delay: calc(0.1s * var(--i));
+}
+
+/* Hover effect */
+.product-card:hover
+ {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Product Image */
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+/* Product Name */
+.product-card h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 10px 0 5px;
+}
+
+/* Price */
+.price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* View Button (Admin Only) */
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background: #e9f5ff;
+  color: #000;
+  transition: background 0.25s, transform 0.15s;
+}
+
+button:hover {
+  background: #d0ebff;
+  transform: scale(1.02);
+}
+
+/* Fade-in + Slide-up Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

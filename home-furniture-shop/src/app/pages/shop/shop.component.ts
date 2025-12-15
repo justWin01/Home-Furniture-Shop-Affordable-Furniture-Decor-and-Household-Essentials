@@ -16,7 +16,13 @@ import { Category } from '../../models/category.model';
 })
 export class ShopComponent implements OnInit {
   products: Product[] = [];
+  paginatedProducts: Product[] = [];
   categories: Category[] = [];
+
+  // Pagination
+  currentPage = 1;
+  productsPerPage = 6; // 2 rows * 3 columns
+  totalPages = 0;
 
   constructor(
     private productService: ProductService,
@@ -25,19 +31,45 @@ export class ShopComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Fetch categories first
     this.categoryService.getAll().subscribe(categories => {
       this.categories = categories;
 
-      // Then fetch products
       this.productService.getAll().subscribe(products => {
-        // Map category_name to each product
         this.products = products.map(p => ({
           ...p,
           category_name: this.categories.find(c => c.category_id === p.category_id)?.category_name
         }));
+
+        this.totalPages = Math.ceil(this.products.length / this.productsPerPage);
+        this.updatePaginatedProducts();
       });
     });
+  }
+
+  updatePaginatedProducts() {
+    const startIndex = (this.currentPage - 1) * this.productsPerPage;
+    const endIndex = startIndex + this.productsPerPage;
+    this.paginatedProducts = this.products.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.updatePaginatedProducts();
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePaginatedProducts();
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePaginatedProducts();
+    }
   }
 
   viewProductModal(product: Product) {
@@ -49,7 +81,7 @@ export class ShopComponent implements OnInit {
         <p style="font-weight:bold; color:#0077b6;">₱${product.price}</p>
         <p>Category: ${product.category_name || 'N/A'}</p>
         <p>Description: ${product.description || 'N/A'}</p>
-        <p>Stock Quantity: ${product.stock_quantity}</p> <!-- Added stock_quantity -->
+        <p>Stock Quantity: ${product.stock_quantity}</p>
       `,
       showCloseButton: true,
       showCancelButton: true,
@@ -61,7 +93,6 @@ export class ShopComponent implements OnInit {
       if (result.isConfirmed) this.orderProduct(product);
     });
   }
-
 
   orderProduct(product: Product) {
     const isLoggedIn = localStorage.getItem('token');

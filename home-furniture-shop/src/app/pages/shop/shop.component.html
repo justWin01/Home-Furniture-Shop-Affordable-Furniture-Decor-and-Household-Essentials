@@ -1,11 +1,21 @@
 <div class="shop-container">
   <div class="product-grid">
-    <div class="product-card" *ngFor="let p of products">
+    <div class="product-card"
+         *ngFor="let p of paginatedProducts; let i = index"
+         [style.--i]="i + 1">
       <img *ngIf="p.image" [src]="'http://localhost:5000/static/uploads/products/' + p.image" />
       <h3>{{ p.product_name }}</h3>
       <p class="price">₱{{ p.price }}</p>
       <button (click)="viewProductModal(p)">View</button>
       <button (click)="orderProduct(p)" class="order-btn">Order</button>
     </div>
+  </div>
+
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
   </div>
 </div>
