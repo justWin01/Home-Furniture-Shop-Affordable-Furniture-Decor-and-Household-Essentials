@@ -1,0 +1,38 @@
+.order-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.order-row {
+  display: flex;
+  gap: 16px;
+}
+
+.order-card {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f9f9f9;
+  text-align: center;
+}
+
+
+.order-card:hover {
+  transform: translateY(-4px);
+}
+
+button {
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  background-color: #0077b6;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005f8f;
+}

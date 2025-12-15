@@ -59,6 +59,7 @@ export class LoginComponent {
       next: (res: any) => {
         if (res.user) {
           const user = {
+            user_id: res.user.user_id,
             fullname: res.user.full_name || res.user.name || '',
             address: res.user.address || '',
             email: res.user.email

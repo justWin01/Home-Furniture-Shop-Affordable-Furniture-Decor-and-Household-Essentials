@@ -20,7 +20,7 @@ export class HomecustomerComponent implements OnInit {
   paginatedProducts: Product[] = [];
   categories: Category[] = [];
 
-  selectedCategory: number = 0; // 0 = All categories
+  selectedCategory: number = 0; // 0 = All
 
   // Pagination
   currentPage = 1;
@@ -44,8 +44,8 @@ export class HomecustomerComponent implements OnInit {
       this.productService.getAll().subscribe(products => {
         this.products = products.map(p => ({
           ...p,
-          category_name: this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A',
-          stock_quantity: p.stock_quantity ?? 0 // fallback to 0 if undefined
+          category_name:
+            this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A'
         }));
 
         this.applyFilter();
@@ -100,7 +100,7 @@ export class HomecustomerComponent implements OnInit {
         <p style="font-weight:bold; color:#0077b6;">₱${product.price}</p>
         <p>Category: ${product.category_name}</p>
         <p>Description: ${product.description || 'N/A'}</p>
-        <p>Remaining Stock: ${product.stock_quantity}</p>
+        <p>Stock Quantity: ${product.stock_quantity}</p>
       `,
       showCloseButton: true,
       confirmButtonText: 'Close',
@@ -109,21 +109,39 @@ export class HomecustomerComponent implements OnInit {
   }
 
   orderProduct(product: Product) {
-    if (!product.stock_quantity || product.stock_quantity <= 0) {
+    const userStr = localStorage.getItem('user');
+    const user = userStr ? JSON.parse(userStr) : null;
+
+    if (!user || !user.user_id) {
       Swal.fire({
-        icon: 'error',
-        title: 'Out of Stock',
-        text: 'This product is no longer available.'
+        icon: 'warning',
+        title: 'You must log in first!',
+        text: 'Please log in to place an order.',
+        confirmButtonText: 'Close'
       });
       return;
     }
 
-    // Redirect to order page with product id and quantity = 1
-    this.router.navigate(['/ordercustomer/ordercustomer'], {
-      queryParams: { product_id: product.product_id, quantity: 1 }
-    });
+    // Set quantity to 1 for every order
+    const quantity = 1;
 
-    // Reduce the stock locally
-    product.stock_quantity!--;
+    // Show confirmation alert
+    Swal.fire({
+      icon: 'success',
+      title: 'Order Placed!',
+      html: `<p>You have successfully ordered <strong>${product.product_name}</strong>.</p>
+             <p>Quantity: ${quantity}</p>`,
+      showConfirmButton: true,
+      confirmButtonText: 'Go to My Orders'
+    }).then(() => {
+      // Redirect to order page after confirmation
+      this.router.navigate(['customer/ordercustomer'], {
+        queryParams: {
+          product_id: product.product_id,
+          quantity,
+          customer_id: user.user_id
+        }
+      });
+    });
   }
 }

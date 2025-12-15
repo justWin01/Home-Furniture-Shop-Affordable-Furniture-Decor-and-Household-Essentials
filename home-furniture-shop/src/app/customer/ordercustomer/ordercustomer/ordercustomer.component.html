@@ -1,1 +1,11 @@
-<p>ordercustomer works!</p>
+<div class="order-grid">
+  <div class="order-row" *ngFor="let row of getRows()">
+    <div class="order-card" *ngFor="let order of row">
+      <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+      <p><strong>Product ID:</strong> {{ order.product_id }}</p>
+      <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+      <p><strong>Subtotal:</strong> ₱{{ order.subtotal }}</p>
+      <button (click)="viewOrder(order)">View</button>
+    </div>
+  </div>
+</div>
