@@ -1,4 +1,41 @@
-/* ---------------- Product Container & Grid ---------------- */
+/* First Row - Category Selection */
+.firstrow {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 15px 20px;
+  background-color: #d6e8ff;
+  border-radius: 10px;
+  margin-bottom: 50px;
+}
+
+.firstrow button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.firstrow button:hover {
+  background-color: #d0ebff;
+  transform: scale(1.05);
+}
+
+.firstrow button.active {
+  background-color: #93B1B5;
+  color: #000000;
+  border-color: #0077b6;
+}
+
+/* Hide scroll bar */
+.firstrow::-webkit-scrollbar { display: none; }
+
+/*Product Container & Grid */
 .product-container {
   margin-top: 150px;
   padding: 0 40px;

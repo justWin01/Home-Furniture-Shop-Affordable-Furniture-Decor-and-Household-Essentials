@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
+
 import { ProductService } from '../../services/product.service';
 import { CategoryService } from '../../services/category.service';
 import { Product } from '../../models/product.model';
 import { Category } from '../../models/category.model';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-homeadmin',
@@ -20,13 +21,15 @@ export class HomeadminComponent implements OnInit {
   paginatedProducts: Product[] = [];
   categories: Category[] = [];
 
+  selectedCategory: number = 0; // 0 = All
+
+  // Pagination
   currentPage = 1;
   productsPerPage = 6;
   totalPages = 0;
 
   showAddProductModal = false;
 
-  // Partial<Product> allows optional product_id
   newProduct: Partial<Product> = {
     product_name: '',
     price: 0,
@@ -44,40 +47,74 @@ export class HomeadminComponent implements OnInit {
     this.loadProducts();
   }
 
+  // =============================
+  // LOAD PRODUCTS + CATEGORIES
+  // =============================
   loadProducts() {
     this.categoryService.getAll().subscribe(categories => {
       this.categories = categories;
+
       this.productService.getAll().subscribe(products => {
         this.products = products.map(p => ({
           ...p,
-          category_name: this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A'
+          category_name:
+            this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A'
         }));
-        this.totalPages = Math.ceil(this.products.length / this.productsPerPage);
-        this.updatePaginatedProducts();
+
+        this.applyFilter();
       });
     });
   }
 
-  updatePaginatedProducts() {
+  // =============================
+  // FILTER BY CATEGORY
+  // =============================
+  applyFilter() {
+    let filteredProducts = this.products;
+
+    if (this.selectedCategory !== 0) {
+      filteredProducts = this.products.filter(
+        p => p.category_id === this.selectedCategory
+      );
+    }
+
+    this.totalPages = Math.ceil(filteredProducts.length / this.productsPerPage);
+    this.currentPage = 1;
+    this.updatePaginatedProducts(filteredProducts);
+  }
+
+  filterByCategory(categoryId: number) {
+    this.selectedCategory = categoryId;
+    this.applyFilter();
+  }
+
+  // =============================
+  // PAGINATION
+  // =============================
+  updatePaginatedProducts(filteredProducts?: Product[]) {
+    const list = filteredProducts || this.products;
     const start = (this.currentPage - 1) * this.productsPerPage;
     const end = start + this.productsPerPage;
-    this.paginatedProducts = this.products.slice(start, end);
+    this.paginatedProducts = list.slice(start, end);
   }
 
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.updatePaginatedProducts();
+      this.applyFilter();
     }
   }
 
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.updatePaginatedProducts();
+      this.applyFilter();
     }
   }
 
+  // =============================
+  // VIEW PRODUCT
+  // =============================
   viewProductModal(product: Product) {
     Swal.fire({
       title: `<strong>${product.product_name}</strong>`,
@@ -93,6 +130,9 @@ export class HomeadminComponent implements OnInit {
     });
   }
 
+  // =============================
+  // DELETE PRODUCT
+  // =============================
   deleteProduct(productId: number) {
     Swal.fire({
       title: 'Are you sure?',
@@ -107,12 +147,10 @@ export class HomeadminComponent implements OnInit {
         this.productService.delete(productId).subscribe({
           next: () => {
             Swal.fire('Deleted!', 'Product has been deleted.', 'success');
+
             this.products = this.products.filter(p => p.product_id !== productId);
-            this.totalPages = Math.ceil(this.products.length / this.productsPerPage);
-            if (this.currentPage > this.totalPages && this.totalPages > 0) {
-              this.currentPage = this.totalPages;
-            }
-            this.updatePaginatedProducts();
+
+            this.applyFilter();
           },
           error: () => Swal.fire('Error', 'Failed to delete product', 'error')
         });
@@ -120,6 +158,9 @@ export class HomeadminComponent implements OnInit {
     });
   }
 
+  // =============================
+  // ADD PRODUCT
+  // =============================
   submitAddProduct() {
     if (!this.newProduct.product_name || !this.newProduct.price || !this.newProduct.category_id) {
       Swal.fire('Error', 'Please fill all required fields', 'error');
@@ -136,7 +177,6 @@ export class HomeadminComponent implements OnInit {
 
     this.productService.create(payload).subscribe({
       next: (res: any) => {
-
         const createdProduct: Product = res.product;
 
         Swal.fire('Success', 'Product added successfully', 'success');
@@ -147,8 +187,7 @@ export class HomeadminComponent implements OnInit {
             this.categories.find(c => c.category_id === createdProduct.category_id)?.category_name || 'N/A'
         });
 
-        this.totalPages = Math.ceil(this.products.length / this.productsPerPage);
-        this.updatePaginatedProducts();
+        this.applyFilter();
 
         // Reset form
         this.newProduct = {
@@ -163,9 +202,8 @@ export class HomeadminComponent implements OnInit {
       },
       error: (err) => {
         console.error('Add Product Error:', err);
-        Swal.fire('Error', 'Failed to create product. Check backend logs.', 'error');
+        Swal.fire('Error', 'Failed to create product no duplicate', 'error');
       }
     });
   }
-
 }

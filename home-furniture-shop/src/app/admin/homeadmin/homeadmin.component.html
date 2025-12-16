@@ -1,5 +1,19 @@
-<button (click)="showAddProductModal = true">Add Product</button>
+<!-- First Row: Category Selection -->
+<div class="firstrow">
+  <button
+    [class.active]="selectedCategory === 0"
+    (click)="filterByCategory(0)">
+    All
+  </button>
 
+  <button
+    *ngFor="let c of categories"
+    [class.active]="selectedCategory === c.category_id"
+    (click)="filterByCategory(c.category_id)">
+    {{ c.category_name }}
+  </button>
+  <button (click)="showAddProductModal = true">Add Product</button>
+</div>
 <div class="modal-backdrop" *ngIf="showAddProductModal">
   <div class="modal">
     <h2>Add New Product</h2>
