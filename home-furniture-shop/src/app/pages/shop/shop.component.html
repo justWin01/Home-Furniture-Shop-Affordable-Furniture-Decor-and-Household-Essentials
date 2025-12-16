@@ -1,21 +1,52 @@
+<!-- CATEGORY FILTER -->
+<div class="category-filter">
+  <button
+    [class.active]="selectedCategory === 0"
+    (click)="filterByCategory(0)">
+    All
+  </button>
+
+  <button
+    *ngFor="let c of categories"
+    [class.active]="selectedCategory === c.category_id"
+    (click)="filterByCategory(c.category_id)">
+    {{ c.category_name }}
+  </button>
+</div>
+
+<!-- SHOP PRODUCTS -->
 <div class="shop-container">
-  <div class="product-grid">
-    <div class="product-card"
-         *ngFor="let p of paginatedProducts; let i = index"
-         [style.--i]="i + 1">
-      <img *ngIf="p.image" [src]="'http://localhost:5000/static/uploads/products/' + p.image" />
+
+  <div class="product-grid" *ngIf="paginatedProducts.length > 0">
+    <div
+      class="product-card"
+      *ngFor="let p of paginatedProducts; let i = index"
+      [style.--i]="i + 1">
+
+      <img
+        *ngIf="p.image"
+        [src]="'http://localhost:5000/static/uploads/products/' + p.image"
+      />
+
       <h3>{{ p.product_name }}</h3>
       <p class="price">₱{{ p.price }}</p>
+
       <button (click)="viewProductModal(p)">View</button>
       <button (click)="orderProduct(p)" class="order-btn">Order</button>
     </div>
   </div>
 
+  <p *ngIf="paginatedProducts.length === 0">
+    No products found.
+  </p>
 
-  <!-- Pagination -->
+  <!-- PAGINATION -->
   <div class="pagination">
     <button (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>
     <span>Page {{ currentPage }} of {{ totalPages }}</span>
     <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
   </div>
+
 </div>
+
+

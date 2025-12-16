@@ -19,9 +19,11 @@ export class ShopComponent implements OnInit {
   paginatedProducts: Product[] = [];
   categories: Category[] = [];
 
+  selectedCategory: number = 0; // 0 = All
+
   // Pagination
   currentPage = 1;
-  productsPerPage = 6; // 2 rows * 3 columns
+  productsPerPage = 6;
   totalPages = 0;
 
   constructor(
@@ -31,47 +33,73 @@ export class ShopComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadProducts();
+  }
+
+  loadProducts() {
     this.categoryService.getAll().subscribe(categories => {
       this.categories = categories;
 
       this.productService.getAll().subscribe(products => {
         this.products = products.map(p => ({
           ...p,
-          category_name: this.categories.find(c => c.category_id === p.category_id)?.category_name
+          category_name: this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A'
         }));
 
-        this.totalPages = Math.ceil(this.products.length / this.productsPerPage);
-        this.updatePaginatedProducts();
+        this.applyFilter();
       });
     });
   }
 
-  updatePaginatedProducts() {
-    const startIndex = (this.currentPage - 1) * this.productsPerPage;
-    const endIndex = startIndex + this.productsPerPage;
-    this.paginatedProducts = this.products.slice(startIndex, endIndex);
+  // =============================
+  // FILTER PRODUCTS
+  // =============================
+  applyFilter() {
+    let filteredProducts = this.products;
+
+    if (this.selectedCategory !== 0) {
+      filteredProducts = this.products.filter(
+        p => p.category_id === this.selectedCategory
+      );
+    }
+
+    this.totalPages = Math.ceil(filteredProducts.length / this.productsPerPage);
+    this.currentPage = 1;
+    this.updatePaginatedProducts(filteredProducts);
   }
 
-  goToPage(page: number) {
-    if (page < 1 || page > this.totalPages) return;
-    this.currentPage = page;
-    this.updatePaginatedProducts();
+  filterByCategory(categoryId: number) {
+    this.selectedCategory = categoryId;
+    this.applyFilter();
+  }
+
+  // =============================
+  // PAGINATION
+  // =============================
+  updatePaginatedProducts(filteredProducts?: Product[]) {
+    const list = filteredProducts || this.products;
+    const startIndex = (this.currentPage - 1) * this.productsPerPage;
+    const endIndex = startIndex + this.productsPerPage;
+    this.paginatedProducts = list.slice(startIndex, endIndex);
   }
 
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.updatePaginatedProducts();
+      this.applyFilter();
     }
   }
 
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.updatePaginatedProducts();
+      this.applyFilter();
     }
   }
 
+  // =============================
+  // VIEW PRODUCT MODAL
+  // =============================
   viewProductModal(product: Product) {
     Swal.fire({
       title: `<strong>${product.product_name}</strong>`,
@@ -79,7 +107,7 @@ export class ShopComponent implements OnInit {
         <img src="http://localhost:5000/static/uploads/products/${product.image || ''}"
              style="width:250px; height:250px; object-fit:cover; margin-bottom:10px;" />
         <p style="font-weight:bold; color:#0077b6;">₱${product.price}</p>
-        <p>Category: ${product.category_name || 'N/A'}</p>
+        <p>Category: ${product.category_name}</p>
         <p>Description: ${product.description || 'N/A'}</p>
         <p>Stock Quantity: ${product.stock_quantity}</p>
       `,
@@ -94,6 +122,9 @@ export class ShopComponent implements OnInit {
     });
   }
 
+  // =============================
+  // ORDER PRODUCT
+  // =============================
   orderProduct(product: Product) {
     const isLoggedIn = localStorage.getItem('token');
 
