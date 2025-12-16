@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { OrderService } from '../../../services/order.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -11,44 +11,28 @@ import Swal from 'sweetalert2';
   styleUrls: ['./ordercustomer.component.css']
 })
 export class OrdercustomerComponent implements OnInit {
+  orders: any[] = [];
+  gridColumns = 3;
 
-  orders: any[] = [];      // holds all order details for the customer
-  gridColumns = 3;         // max columns per row
-  private api = 'http://localhost:5000/api/order_details';
-
-  constructor(private http: HttpClient) {}
+  constructor(private orderService: OrderService) {}
 
   ngOnInit(): void {
     this.loadOrders();
   }
 
-  loadOrders() {
-    const userStr = localStorage.getItem('user');
-    const user = userStr ? JSON.parse(userStr) : null;
-
-    if (!user?.user_id) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'You must log in first!',
-        text: 'Please log in to view your orders.',
-        confirmButtonText: 'Close'
-      });
-      return;
-    }
-
-    // Fetch only orders for the logged-in customer
-    this.http.get<any[]>(`${this.api}?customer_id=${user.user_id}`).subscribe({
-      next: details => this.orders = details,
-      error: err => Swal.fire({
-        icon: 'error',
-        title: 'Error fetching orders',
-        text: err.error?.message || 'Server error'
-      })
+  loadOrders(): void {
+    this.orderService.getUserOrders().subscribe({
+      next: details => {
+        this.orders = details;
+        if (!details.length) {
+          Swal.fire('No Orders', 'You have not placed any orders yet.', 'info');
+        }
+      },
+      error: err => Swal.fire('Error', err.message || 'Server error', 'error')
     });
   }
 
-  // Break orders into rows for grid display
-  getRows() {
+  getRows(): any[][] {
     const rows: any[][] = [];
     for (let i = 0; i < this.orders.length; i += this.gridColumns) {
       rows.push(this.orders.slice(i, i + this.gridColumns));
@@ -56,14 +40,16 @@ export class OrdercustomerComponent implements OnInit {
     return rows;
   }
 
-  // Show order details in a modal
-  viewOrder(order: any) {
+  viewOrder(order: any): void {
     Swal.fire({
       title: `Order #${order.order_id}`,
       html: `
-        <p><strong>Product ID:</strong> ${order.product_id}</p>
+        <img src="${order.product_image}" alt="${order.product_name}" style="width:100%; height:120px; object-fit:cover; margin-bottom:10px;" />
+        <p><strong>Product:</strong> ${order.product_name}</p>
         <p><strong>Quantity:</strong> ${order.quantity}</p>
         <p><strong>Subtotal:</strong> ₱${order.subtotal}</p>
+        <p><strong>Status:</strong> ${order.status}</p>
+        <p><strong>Order Date:</strong> ${new Date(order.order_date).toLocaleString()}</p>
       `,
       showCloseButton: true,
       confirmButtonText: 'Close'

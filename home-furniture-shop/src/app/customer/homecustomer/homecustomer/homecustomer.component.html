@@ -20,7 +20,8 @@
     <div class="product-card" *ngFor="let p of paginatedProducts; let i = index" [style.--i]="i + 1">
 
       <img *ngIf="p.image"
-           [src]="'http://localhost:5000/static/uploads/products/' + p.image" />
+      [src]="'http://localhost:5000/static/uploads/products/' + p.image"
+      alt="{{ p.product_name }}" />
 
       <h3>{{ p.product_name }}</h3>
       <p class="price">₱{{ p.price }}</p>

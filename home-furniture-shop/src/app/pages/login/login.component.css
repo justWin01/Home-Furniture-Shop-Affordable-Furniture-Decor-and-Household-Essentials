@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #ffffff;
+  background: azure;
   padding: 20px;
   animation: fadeIn 0.8s ease-in-out;
 }

@@ -1,39 +1,32 @@
+/* ---------------- Product Container & Grid ---------------- */
 .product-container {
   margin-top: 150px;
   padding: 0 40px;
 }
 
-
-/* Product Grid */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 50px;
 }
 
-/* Product Card */
 .product-card {
-  background: #fff;
+  background: #93B1B5;
   border-radius: 14px;
   padding: 16px;
   text-align: center;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   transition: transform 0.25s, box-shadow 0.25s;
-
-  /* Animation */
   opacity: 0;
   animation: fadeInUp 0.5s forwards;
   animation-delay: calc(0.1s * var(--i));
 }
 
-/* Hover effect */
-.product-card:hover
- {
+.product-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
-/* Product Image */
 .product-card img {
   width: 100%;
   height: 200px;
@@ -42,7 +35,6 @@
   margin-bottom: 12px;
 }
 
-/* Product Name */
 .product-card h3 {
   font-size: 1.05rem;
   font-weight: 600;
@@ -50,14 +42,13 @@
   margin: 10px 0 5px;
 }
 
-/* Price */
 .price {
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 12px;
 }
 
-/* View Button (Admin Only) */
+/* Buttons */
 button {
   width: 100%;
   padding: 10px;
@@ -76,7 +67,48 @@ button:hover {
   transform: scale(1.02);
 }
 
-/* Fade-in + Slide-up Animation */
+/* Delete Button Override */
+.delete-btn {
+  background-color: #ff6961;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background-color: #e04e4e;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 30px;
+  font-size: 1rem;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  background-color: #93B1B5;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.pagination button:hover {
+  background-color: #d0ebff;
+  transform: scale(1.02);
+}
+
+.spancolor {
+  color: white;
+  font-weight: 500;
+}
+
+/* ---------------- Fade-in + Slide-up Animation ---------------- */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -86,4 +118,122 @@ button:hover {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ---------------- Add Product Modal ---------------- */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: #fff;
+  padding: 30px 25px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #444;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #5a9bd4;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s, color 0.2s;
+}
+
+.submit-btn {
+  background-color: #5a9bd4;
+  color: #fff;
+}
+
+.submit-btn:hover {
+  background-color: #3d7bbf;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background-color: #999;
+}
+
+/* Add Product Button */
+.add-product-btn {
+  margin-bottom: 20px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  background-color: #93B1B5;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-product-btn:hover {
+  background-color: #3d7bbf;
+}
+
+/* Modal Fade-in Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

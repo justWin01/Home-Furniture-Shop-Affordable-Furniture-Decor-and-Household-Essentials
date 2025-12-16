@@ -1,11 +1,15 @@
-<div class="order-grid">
+<div class="orders-container" *ngIf="orders.length > 0; else noOrders">
   <div class="order-row" *ngFor="let row of getRows()">
-    <div class="order-card" *ngFor="let order of row">
-      <p><strong>Order ID:</strong> {{ order.order_id }}</p>
-      <p><strong>Product ID:</strong> {{ order.product_id }}</p>
+    <div class="order-card" *ngFor="let order of row" (click)="viewOrder(order)">
+      <img *ngIf="order.product_image" [src]="order.product_image" alt="{{ order.product_name }}" class="product-img" />
+      <h3>{{ order.product_name }}</h3>
       <p><strong>Quantity:</strong> {{ order.quantity }}</p>
       <p><strong>Subtotal:</strong> ₱{{ order.subtotal }}</p>
-      <button (click)="viewOrder(order)">View</button>
+      <p><strong>Status:</strong> {{ order.status }}</p>
     </div>
   </div>
 </div>
+
+<ng-template #noOrders>
+  <p class="no-orders">You have not placed any orders yet.</p>
+</ng-template>

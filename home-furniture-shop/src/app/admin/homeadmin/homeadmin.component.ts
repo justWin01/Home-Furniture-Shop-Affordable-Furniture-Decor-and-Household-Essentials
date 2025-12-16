@@ -1,15 +1,16 @@
-import Swal from 'sweetalert2';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
 import { CategoryService } from '../../services/category.service';
 import { Product } from '../../models/product.model';
 import { Category } from '../../models/category.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-homeadmin',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './homeadmin.component.html',
   styleUrls: ['./homeadmin.component.css']
 })
@@ -19,10 +20,20 @@ export class HomeadminComponent implements OnInit {
   paginatedProducts: Product[] = [];
   categories: Category[] = [];
 
-  // Pagination
   currentPage = 1;
   productsPerPage = 6;
   totalPages = 0;
+
+  showAddProductModal = false;
+
+  // Partial<Product> allows optional product_id
+  newProduct: Partial<Product> = {
+    product_name: '',
+    price: 0,
+    description: '',
+    category_id: 0,
+    stock_quantity: 0
+  };
 
   constructor(
     private productService: ProductService,
@@ -36,15 +47,11 @@ export class HomeadminComponent implements OnInit {
   loadProducts() {
     this.categoryService.getAll().subscribe(categories => {
       this.categories = categories;
-
       this.productService.getAll().subscribe(products => {
         this.products = products.map(p => ({
           ...p,
-          category_name:
-            this.categories.find(c => c.category_id === p.category_id)
-              ?.category_name || 'N/A'
+          category_name: this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A'
         }));
-
         this.totalPages = Math.ceil(this.products.length / this.productsPerPage);
         this.updatePaginatedProducts();
       });
@@ -75,18 +82,17 @@ export class HomeadminComponent implements OnInit {
     Swal.fire({
       title: `<strong>${product.product_name}</strong>`,
       html: `
-        <img src="http://localhost:5000/static/uploads/products/${product.image || ''}"
-             style="width:250px; height:250px; object-fit:cover; margin-bottom:10px;" />
-        <p style="font-weight:bold;">₱${product.price}</p>
-        <p>Category: ${product.category_name}</p>
-        <p>Description: ${product.description || 'N/A'}</p>
-        <p>Stock: ${product.stock_quantity}</p>
+        <p><strong>Price:</strong> ₱${product.price}</p>
+        <p><strong>Category:</strong> ${product.category_name}</p>
+        <p><strong>Description:</strong> ${product.description || 'N/A'}</p>
+        <p><strong>Stock:</strong> ${product.stock_quantity}</p>
       `,
       showCloseButton: true,
       confirmButtonText: 'Close',
       width: 400
     });
   }
+
   deleteProduct(productId: number) {
     Swal.fire({
       title: 'Are you sure?',
@@ -101,24 +107,65 @@ export class HomeadminComponent implements OnInit {
         this.productService.delete(productId).subscribe({
           next: () => {
             Swal.fire('Deleted!', 'Product has been deleted.', 'success');
-
-            // Remove product locally
             this.products = this.products.filter(p => p.product_id !== productId);
-
             this.totalPages = Math.ceil(this.products.length / this.productsPerPage);
-
-            // Fix page overflow
             if (this.currentPage > this.totalPages && this.totalPages > 0) {
               this.currentPage = this.totalPages;
             }
-
             this.updatePaginatedProducts();
           },
-          error: () => {
-            Swal.fire('Error', 'Failed to delete product.', 'error');
-          }
+          error: () => Swal.fire('Error', 'Failed to delete product', 'error')
         });
       }
     });
   }
+
+  submitAddProduct() {
+    if (!this.newProduct.product_name || !this.newProduct.price || !this.newProduct.category_id) {
+      Swal.fire('Error', 'Please fill all required fields', 'error');
+      return;
+    }
+
+    const payload = {
+      product_name: this.newProduct.product_name,
+      price: this.newProduct.price,
+      stock_quantity: this.newProduct.stock_quantity ?? 0,
+      description: this.newProduct.description ?? '',
+      category_id: this.newProduct.category_id
+    };
+
+    this.productService.create(payload).subscribe({
+      next: (res: any) => {
+
+        const createdProduct: Product = res.product;
+
+        Swal.fire('Success', 'Product added successfully', 'success');
+
+        this.products.push({
+          ...createdProduct,
+          category_name:
+            this.categories.find(c => c.category_id === createdProduct.category_id)?.category_name || 'N/A'
+        });
+
+        this.totalPages = Math.ceil(this.products.length / this.productsPerPage);
+        this.updatePaginatedProducts();
+
+        // Reset form
+        this.newProduct = {
+          product_name: '',
+          price: 0,
+          stock_quantity: 0,
+          description: '',
+          category_id: 0
+        };
+
+        this.showAddProductModal = false;
+      },
+      error: (err) => {
+        console.error('Add Product Error:', err);
+        Swal.fire('Error', 'Failed to create product. Check backend logs.', 'error');
+      }
+    });
+  }
+
 }

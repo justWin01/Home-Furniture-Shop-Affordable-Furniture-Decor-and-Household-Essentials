@@ -5,8 +5,10 @@ from app.services.product_service import ProductService
 
 product_bp = Blueprint("product_bp", __name__)
 
+
 # Folder to save uploaded product images
-UPLOAD_FOLDER = "static/uploads/products"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # points to app
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads", "products")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # ----------------------------
@@ -23,7 +25,13 @@ def get_products():
 @product_bp.route("/<int:product_id>", methods=["GET"])
 def get_product(product_id):
     product = ProductService.get_product_by_id(product_id)
-    return jsonify(product.to_dict()), 200
+    product_dict = product.to_dict()
+    if product_dict.get("image"):
+        product_dict["image"] = request.host_url + "static/uploads/products/" + product_dict["image"]
+    else:
+        product_dict["image"] = request.host_url + "static/uploads/products/no-image.png"
+    return jsonify(product_dict), 200
+
 
 # ----------------------------
 # CREATE PRODUCT

@@ -9,17 +9,17 @@ def register_routes(app: Flask):
   
     #all blueprints with their URL prefixes
     
-    # User routes (CRUD, login, signup, forgot-password)
+    # User routes
     app.register_blueprint(user_bp, url_prefix="/api/users")
 
-    # Product routes (CRUD)
+    # Product routes 
     app.register_blueprint(product_bp, url_prefix='/api/products')
 
-    # Orders routes (CRUD)
+    # Orders routes 
     app.register_blueprint(orders_bp, url_prefix='/api/orders')
 
-    # Order Details routes (CRUD)
-    app.register_blueprint(order_details_bp, url_prefix='/api/order-details')
+    # Order DetailAs routes 
+    app.register_blueprint(order_details_bp, url_prefix='/api/order_details')
 
-    # Category routes (CRUD)
+    # Category routes 
     app.register_blueprint(category_bp, url_prefix='/api/categories')

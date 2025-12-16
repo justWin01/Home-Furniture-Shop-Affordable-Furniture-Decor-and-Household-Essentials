@@ -1,22 +1,56 @@
+<button (click)="showAddProductModal = true">Add Product</button>
+
+<div class="modal-backdrop" *ngIf="showAddProductModal">
+  <div class="modal">
+    <h2>Add New Product</h2>
+    <form (ngSubmit)="submitAddProduct()">
+      <div class="form-group">
+        <label for="product_name">Product Name</label>
+        <input id="product_name" type="text" [(ngModel)]="newProduct.product_name" name="product_name" required placeholder="Enter product name">
+      </div>
+
+      <div class="form-group">
+        <label for="price">Price</label>
+        <input id="price" type="number" [(ngModel)]="newProduct.price" name="price" required placeholder="Enter price">
+      </div>
+
+      <div class="form-group">
+        <label for="stock_quantity">Stock Quantity</label>
+        <input id="stock_quantity" type="number" [(ngModel)]="newProduct.stock_quantity" name="stock_quantity" placeholder="Enter stock quantity">
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" [(ngModel)]="newProduct.category_id" name="category_id" required>
+          <option value="" disabled selected>Select category</option>
+          <option *ngFor="let c of categories" [value]="c.category_id">{{ c.category_name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" [(ngModel)]="newProduct.description" name="description" placeholder="Enter product description"></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit">Add Product</button>
+        <button type="button" (click)="showAddProductModal = false">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="product-container">
   <div class="product-grid">
-    <div class="product-card"
-         *ngFor="let p of paginatedProducts; let i = index"
-         [style.--i]="i + 1">
-
-      <img *ngIf="p.image"
-           [src]="'http://localhost:5000/static/uploads/products/' + p.image" />
-
+    <div class="product-card" *ngFor="let p of paginatedProducts; let i = index" [style.--i]="i + 1">
       <h3>{{ p.product_name }}</h3>
       <p class="price">₱{{ p.price }}</p>
       <p class="category">{{ p.category_name }}</p>
-
       <button (click)="viewProductModal(p)">View</button>
       <button class="delete-btn" (click)="deleteProduct(p.product_id)">Delete</button>
     </div>
   </div>
 
-  <!-- Pagination -->
   <div class="pagination">
     <button (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>
     <span>Page {{ currentPage }} of {{ totalPages }}</span>

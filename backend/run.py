@@ -8,5 +8,4 @@ app = create_app()
 
 if __name__ == "__main__":
     # Run the development server
-    # debug=True enables hot reload and error debugging
     app.run(debug=True)
