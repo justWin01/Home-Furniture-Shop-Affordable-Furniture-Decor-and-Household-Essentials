@@ -26,29 +26,6 @@ def signup():
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
 
-# REGISTER ADMIN - PROTECTED
-@user_bp.route("/admin/register", methods=["POST"])
-def register_admin():
-    # TODO: Add admin authentication check here
-    data = request.get_json()
-    try:    
-        data['role'] = 'Admin'  # Force role to Admin
-        new_user = UserService.create_user(data)
-        return jsonify({"message": "Admin created successfully!", "user": new_user.to_dict()}), 201
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
-
-
-# REGISTER USER (ALTERNATIVE)
-@user_bp.route("/register", methods=["POST"])
-def register():
-    data = request.get_json()
-    try:
-        new_user = UserService.create_user(data)
-        return jsonify({"message": "User created successfully!", "user": new_user.to_dict()}), 201
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
-
 # LOGIN USER
 @user_bp.route("/login", methods=["POST"])
 def login_user():

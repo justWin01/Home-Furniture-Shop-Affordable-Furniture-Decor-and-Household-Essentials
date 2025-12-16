@@ -20,7 +20,7 @@ class User(db.Model):
     # STRING REPRESENTATION
     def __repr__(self):
         return f"<User {self.full_name}>"
-
+    
     # CONVERT TO DICTIONARY
     def to_dict(self):
         return {
