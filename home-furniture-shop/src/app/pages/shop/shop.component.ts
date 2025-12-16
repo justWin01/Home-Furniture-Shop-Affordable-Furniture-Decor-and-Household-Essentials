@@ -16,6 +16,7 @@ import { Category } from '../../models/category.model';
 })
 export class ShopComponent implements OnInit {
   products: Product[] = [];
+  filteredProducts: Product[] = [];
   paginatedProducts: Product[] = [];
   categories: Category[] = [];
 
@@ -33,21 +34,24 @@ export class ShopComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.loadCategories();
+  }
+
+  loadCategories() {
+    this.categoryService.getAll().subscribe(categories => {
+      this.categories = categories;
+      this.loadProducts();
+    });
   }
 
   loadProducts() {
-    this.categoryService.getAll().subscribe(categories => {
-      this.categories = categories;
+    this.productService.getAll().subscribe(products => {
+      this.products = products.map(p => ({
+        ...p,
+        category_name: this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A'
+      }));
 
-      this.productService.getAll().subscribe(products => {
-        this.products = products.map(p => ({
-          ...p,
-          category_name: this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A'
-        }));
-
-        this.applyFilter();
-      });
+      this.applyFilter(); // initialize filtered + paginated
     });
   }
 
@@ -55,45 +59,42 @@ export class ShopComponent implements OnInit {
   // FILTER PRODUCTS
   // =============================
   applyFilter() {
-    let filteredProducts = this.products;
+    this.filteredProducts = this.selectedCategory === 0
+      ? [...this.products]
+      : this.products.filter(p => p.category_id === this.selectedCategory);
 
-    if (this.selectedCategory !== 0) {
-      filteredProducts = this.products.filter(
-        p => p.category_id === this.selectedCategory
-      );
-    }
+    this.totalPages = Math.ceil(this.filteredProducts.length / this.productsPerPage);
+    if (this.currentPage > this.totalPages) this.currentPage = this.totalPages || 1;
 
-    this.totalPages = Math.ceil(filteredProducts.length / this.productsPerPage);
-    this.currentPage = 1;
-    this.updatePaginatedProducts(filteredProducts);
+    this.updatePaginatedProducts();
   }
 
   filterByCategory(categoryId: number) {
     this.selectedCategory = categoryId;
+    this.currentPage = 1; // reset page when filter changes
     this.applyFilter();
   }
 
   // =============================
   // PAGINATION
   // =============================
-  updatePaginatedProducts(filteredProducts?: Product[]) {
-    const list = filteredProducts || this.products;
+  updatePaginatedProducts() {
     const startIndex = (this.currentPage - 1) * this.productsPerPage;
     const endIndex = startIndex + this.productsPerPage;
-    this.paginatedProducts = list.slice(startIndex, endIndex);
+    this.paginatedProducts = this.filteredProducts.slice(startIndex, endIndex);
   }
 
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.applyFilter();
+      this.updatePaginatedProducts();
     }
   }
 
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.applyFilter();
+      this.updatePaginatedProducts();
     }
   }
 

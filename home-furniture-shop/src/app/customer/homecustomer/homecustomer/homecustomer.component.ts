@@ -17,6 +17,7 @@ import { Category } from '../../../models/category.model';
 export class HomecustomerComponent implements OnInit {
 
   products: Product[] = [];
+  filteredProducts: Product[] = [];
   paginatedProducts: Product[] = [];
   categories: Category[] = [];
 
@@ -34,63 +35,74 @@ export class HomecustomerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.loadCategories();
   }
 
-  loadProducts() {
+  loadCategories() {
     this.categoryService.getAll().subscribe(categories => {
       this.categories = categories;
-
-      this.productService.getAll().subscribe(products => {
-        this.products = products.map(p => ({
-          ...p,
-          category_name:
-            this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A'
-        }));
-
-        this.applyFilter();
-      });
+      this.loadProducts();
     });
   }
 
-  applyFilter() {
-    let filteredProducts = this.products;
+  loadProducts() {
+    this.productService.getAll().subscribe(products => {
+      this.products = products.map(p => ({
+        ...p,
+        category_name:
+          this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A'
+      }));
 
-    if (this.selectedCategory !== 0) {
-      filteredProducts = this.products.filter(p => p.category_id === this.selectedCategory);
-    }
-
-    this.totalPages = Math.ceil(filteredProducts.length / this.productsPerPage);
-    this.currentPage = 1;
-    this.updatePaginatedProducts(filteredProducts);
+      this.applyFilter(); // initialize filtered + paginated
+    });
   }
 
-  updatePaginatedProducts(filteredProducts?: Product[]) {
-    const list = filteredProducts || this.products;
+  // =============================
+  // FILTER
+  // =============================
+  applyFilter() {
+    this.filteredProducts = this.selectedCategory === 0
+      ? [...this.products]
+      : this.products.filter(p => p.category_id === this.selectedCategory);
+
+    this.totalPages = Math.ceil(this.filteredProducts.length / this.productsPerPage);
+    if (this.currentPage > this.totalPages) this.currentPage = this.totalPages || 1;
+
+    this.updatePaginatedProducts();
+  }
+
+  filterByCategory(categoryId: number) {
+    this.selectedCategory = categoryId;
+    this.currentPage = 1; // reset page when filter changes
+    this.applyFilter();
+  }
+
+  // =============================
+  // PAGINATION
+  // =============================
+  updatePaginatedProducts() {
     const start = (this.currentPage - 1) * this.productsPerPage;
     const end = start + this.productsPerPage;
-    this.paginatedProducts = list.slice(start, end);
+    this.paginatedProducts = this.filteredProducts.slice(start, end);
   }
 
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.applyFilter();
+      this.updatePaginatedProducts();
     }
   }
 
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.applyFilter();
+      this.updatePaginatedProducts();
     }
   }
 
-  filterByCategory(categoryId: number) {
-    this.selectedCategory = categoryId;
-    this.applyFilter();
-  }
-
+  // =============================
+  // VIEW PRODUCT
+  // =============================
   viewProductModal(product: Product) {
     Swal.fire({
       title: `<strong>${product.product_name}</strong>`,
@@ -122,10 +134,8 @@ export class HomecustomerComponent implements OnInit {
       return;
     }
 
-    // Set quantity to 1 for every order
     const quantity = 1;
 
-    // Show confirmation alert
     Swal.fire({
       icon: 'success',
       title: 'Order Placed!',
@@ -134,7 +144,6 @@ export class HomecustomerComponent implements OnInit {
       showConfirmButton: true,
       confirmButtonText: 'Go to My Orders'
     }).then(() => {
-      // Redirect to order page after confirmation
       this.router.navigate(['customer/ordercustomer'], {
         queryParams: {
           product_id: product.product_id,

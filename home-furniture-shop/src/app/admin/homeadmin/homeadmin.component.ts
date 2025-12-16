@@ -18,6 +18,7 @@ import { Category } from '../../models/category.model';
 export class HomeadminComponent implements OnInit {
 
   products: Product[] = [];
+  filteredProducts: Product[] = [];
   paginatedProducts: Product[] = [];
   categories: Category[] = [];
 
@@ -44,25 +45,29 @@ export class HomeadminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.loadCategories();
   }
 
   // =============================
-  // LOAD PRODUCTS + CATEGORIES
+  // LOAD CATEGORIES THEN PRODUCTS
   // =============================
-  loadProducts() {
+  loadCategories() {
     this.categoryService.getAll().subscribe(categories => {
       this.categories = categories;
+      this.loadProducts();
+    });
+  }
 
-      this.productService.getAll().subscribe(products => {
-        this.products = products.map(p => ({
-          ...p,
-          category_name:
-            this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A'
-        }));
+  loadProducts() {
+    this.productService.getAll().subscribe(products => {
+      // Add category_name for display
+      this.products = products.map(p => ({
+        ...p,
+        category_name:
+          this.categories.find(c => c.category_id === p.category_id)?.category_name || 'N/A'
+      }));
 
-        this.applyFilter();
-      });
+      this.applyFilter(); // initialize filtered + paginated
     });
   }
 
@@ -70,45 +75,44 @@ export class HomeadminComponent implements OnInit {
   // FILTER BY CATEGORY
   // =============================
   applyFilter() {
-    let filteredProducts = this.products;
+    // Filter products
+    this.filteredProducts = this.selectedCategory === 0
+      ? [...this.products]
+      : this.products.filter(p => p.category_id === this.selectedCategory);
 
-    if (this.selectedCategory !== 0) {
-      filteredProducts = this.products.filter(
-        p => p.category_id === this.selectedCategory
-      );
-    }
+    // Reset pagination
+    this.totalPages = Math.ceil(this.filteredProducts.length / this.productsPerPage);
+    if (this.currentPage > this.totalPages) this.currentPage = this.totalPages || 1;
 
-    this.totalPages = Math.ceil(filteredProducts.length / this.productsPerPage);
-    this.currentPage = 1;
-    this.updatePaginatedProducts(filteredProducts);
+    this.updatePaginatedProducts();
   }
 
   filterByCategory(categoryId: number) {
     this.selectedCategory = categoryId;
+    this.currentPage = 1; // Reset to first page on category change
     this.applyFilter();
   }
 
   // =============================
   // PAGINATION
   // =============================
-  updatePaginatedProducts(filteredProducts?: Product[]) {
-    const list = filteredProducts || this.products;
+  updatePaginatedProducts() {
     const start = (this.currentPage - 1) * this.productsPerPage;
     const end = start + this.productsPerPage;
-    this.paginatedProducts = list.slice(start, end);
+    this.paginatedProducts = this.filteredProducts.slice(start, end);
   }
 
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.applyFilter();
+      this.updatePaginatedProducts();
     }
   }
 
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.applyFilter();
+      this.updatePaginatedProducts();
     }
   }
 
@@ -148,6 +152,7 @@ export class HomeadminComponent implements OnInit {
           next: () => {
             Swal.fire('Deleted!', 'Product has been deleted.', 'success');
 
+            // Remove from products
             this.products = this.products.filter(p => p.product_id !== productId);
 
             this.applyFilter();
@@ -197,12 +202,11 @@ export class HomeadminComponent implements OnInit {
           description: '',
           category_id: 0
         };
-
         this.showAddProductModal = false;
       },
       error: (err) => {
         console.error('Add Product Error:', err);
-        Swal.fire('Error', 'Failed to create product no duplicate', 'error');
+        Swal.fire('Error', 'Failed to create product', 'error');
       }
     });
   }
