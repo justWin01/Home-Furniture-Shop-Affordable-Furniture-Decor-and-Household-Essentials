@@ -37,6 +37,7 @@ class ProductService:
 
         try:
             stock_quantity = int(data.get("stock_quantity", 0) or 0)
+            stock_quantity = 0
         except ValueError:
             stock_quantity = 0
 
@@ -49,7 +50,7 @@ class ProductService:
         product = Product(
             product_name=data.get("product_name"),
             price=price,
-            stock_quantity=stock_quantity,
+            stock_quantity=0,
             description=data.get("description"),
             category_id=category_id,
             image=image_filename

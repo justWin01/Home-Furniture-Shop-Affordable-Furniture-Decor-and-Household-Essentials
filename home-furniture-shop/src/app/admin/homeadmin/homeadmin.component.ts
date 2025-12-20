@@ -126,7 +126,7 @@ export class HomeadminComponent implements OnInit {
         <p><strong>Price:</strong> ₱${product.price}</p>
         <p><strong>Category:</strong> ${product.category_name}</p>
         <p><strong>Description:</strong> ${product.description || 'N/A'}</p>
-        <p><strong>Stock:</strong> ${product.stock_quantity}</p>
+        <p><strong>Stock:</strong> ${product.stock_quantity} || 'N/A'</p>
       `,
       showCloseButton: true,
       confirmButtonText: 'Close',
